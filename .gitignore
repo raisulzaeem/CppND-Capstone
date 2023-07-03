@@ -35,3 +35,8 @@
 .vs/
 build/
 out/
+
+# Visual Studio files
+.vscode/
+Capstone.vcxproj
+Capstone.vcxproj.user
