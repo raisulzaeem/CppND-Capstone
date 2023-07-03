@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+
+.github/**
+.vs/
+build/
+out/
