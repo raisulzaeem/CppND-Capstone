@@ -3,6 +3,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <math.h>
 
 
 struct Color {
@@ -48,24 +49,26 @@ public:
     void translate(cv::Point t) { 
         this->center_+= t;
     }
-    virtual void rotate(float angle) { std::cout << "Shape::rotate()\n"; }
-    virtual cv::Mat draw() const = 0;
+    void rotate(const double angle) { angle_ += angle; }
+    void scale(const double scale) { scale_ *= scale; }
+    virtual cv::Mat draw(Color) const = 0;
 
 private:
     cv::Point center_{};
-    double angle_{0}, scale_{ 1.0 };
-    Paper canvus_{};
-    cv::Mat rotationMatrix{};
+    double side_;
+    double angle_{ 0 }, scale_{ 1.0 };
 
 protected:
+    cv::Mat get_rotationMatrix() const {
+        return cv::getRotationMatrix2D( center_, angle_, scale_ );
+    }
+    Paper canvus_{};
     void setAngle(double angle) {
         this->angle_ = angle;
     }
     void setScale(double scale) {
         this->scale_ = scale;
     }
-
-
 };
 
 
@@ -79,8 +82,8 @@ public:
 
     double radius() const noexcept { return radius_; }
 
-    void rotate() override { std::cout << "Circle::rotate()\n"; }
-    cv::Mat draw() const override { std::cout << "Circle::draw()\n"; }
+
+    cv::Mat draw(Color color) const override { std::cout << "Circle::draw()\n"; }
 
 private:
     double radius_{};
@@ -97,10 +100,44 @@ public:
 
     double side() const noexcept { return side_; }
 
-    cv::Mat draw() const override { std::cout << "Square::draw()\n"; }
+    cv::Mat draw(Color color) const override { std::cout << "Square::draw()\n"; }
 
 private:
     double side_{};
+};
+
+
+class Triangle : public Shape
+{
+public:
+    explicit Triangle(double side)
+        : base_(side)
+    {
+        height_ = side * (sqrt(3)/2);
+    }
+
+    explicit Triangle(double base, double height)
+        : base_(base), height_(height)
+    {}
+
+
+    double base() const noexcept { return base_; }
+
+    cv::Mat draw(Color color) const override {
+        cv::Mat image(height_, base_, CV_8UC3, cv::Scalar(0, 0, 0));
+        cv::Point vertices[3];
+        vertices[0] = cv::Point(0, height_ - 1);           // Bottom-left corner
+        vertices[1] = cv::Point(base_ - 1, height_ - 1);   // Bottom-right corner
+        vertices[2] = cv::Point(base_ / 2, 0);             // Top-center
+        cv::fillConvexPoly(image, vertices, 3, cv::Scalar(color.R, color.G, color.B), cv::LINE_AA);
+        cv::Mat M = get_rotationMatrix();
+        cv::transform(image, image, M);
+        return image;
+    }
+
+private:
+    double base_{};
+    double height_{};
 };
 
 
@@ -108,9 +145,13 @@ int main() {
     std::cout << "My name is Raisul Islam!" << "\n";
 
   
-    Color red(150, 150, 0);
+    Color red(150, 0, 0);
 
     Paper pap(red);
+
+    Triangle T(1000);
+
+    const cv::Mat bla = T.draw(red);
 
     pap.show();
 
