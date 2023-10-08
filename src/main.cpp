@@ -28,17 +28,20 @@ public:
 
 class Shape {
 public:
+    static int nextID;
+    const int id;
+
     // Constructor
     Shape(double centerX = 0.0, double centerY = 0.0, double angle = 0.0)
         : center(std::make_shared<Point>(centerX, centerY)),
-        angle_(angle) 
+        angle_(angle), id(nextID++)
     {
     }
 
     // Methods to translate and rotate the shape
     virtual void translate(double dx, double dy) {
-        center->x += dx;
-        center->y += dy;
+        position.x += dx;
+        position.y += dy;
     }
 
     virtual void rotate(double degrees) {
@@ -66,6 +69,7 @@ protected:
     double angle_{ 0 }, height_{ 0 }, width_{0};
 private:
     std::shared_ptr<Point> center;
+    Point position{0, 0}; // Upper left corner
 };
 
 
@@ -208,10 +212,10 @@ private:
     cv::Mat data{ cv::Size(rows_, colums_),CV_8UC3, CV_RGB(color_.R, color_.G, color_.B) }; // in pixels
 };
 
+int Shape::nextID = 1; // Initialize the static variable
 
 int main() {
     std::cout << "Udacity is eating my money!!!" << "\n";
-
   
     Color red(150, 0, 0);
 
