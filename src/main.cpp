@@ -17,10 +17,10 @@ struct Color {
 
 
 
-// Nested Point class for center management
-class Point {
+// Nested Point_ class for center management
+class Point_ {
 public:
-    Point(double x, double y) : x(x), y(y) {}
+    Point_(double x, double y) : x(x), y(y) {}
     double x;
     double y;
 };
@@ -33,7 +33,7 @@ public:
 
     // Constructor
     Shape(double centerX = 0.0, double centerY = 0.0, double angle = 0.0)
-        : center(std::make_shared<Point>(centerX, centerY)),
+        : center(std::make_shared<Point_>(centerX, centerY)),
         angle_(angle), id(nextID++)
     {
     }
@@ -55,21 +55,30 @@ public:
         width_ = width_ * factor;
     }
 
+    void changeColor(Color newColor) {
+        color = newColor;
+    }
+
     // Virtual function to calculate the area and draw the shape
     virtual double getArea() const = 0;
-    virtual cv::Mat draw(Color) const = 0;
+    virtual cv::Mat draw() const = 0;
 
     // Getter methods
     double getCenterX() const { return center->x; }
     double getCenterY() const { return center->y; }
 
-    std::shared_ptr<Point> getCenter() const { return center; }
+    Point_ getPostion() { return position;};
+    double getHeight() { return height_; }
+    double getWidth() { return width_; }
+
+    std::shared_ptr<Point_> getCenter() const { return center; }
 
 protected:
     double angle_{ 0 }, height_{ 0 }, width_{0};
+    Color color{255,0,0};
 private:
-    std::shared_ptr<Point> center;
-    Point position{0, 0}; // Upper left corner
+    std::shared_ptr<Point_> center;
+    Point_ position{0, 0}; // Upper left corner
 };
 
 
@@ -80,6 +89,7 @@ public:
         : Shape(centerX, centerY) {
         height_ = radius * 2;
         width_ = radius * 2;
+        color = Color(255, 0, 0);
     }
 
     Circle(double radius)
@@ -92,7 +102,7 @@ public:
         return 3.14159265358979323846 * pow(getRadius(),2) ; // Pi * r^2
     }
 
-    cv::Mat draw(Color color) const {
+    cv::Mat draw() const {
         cv::Mat image(height_, width_, CV_8UC3, cv::Scalar(0, 0, 0));
         cv::Point center(getCenterX(), getCenterY());
         cv::circle(image, center, (height_ / 2), cv::Scalar(color.B, color.G, color.R), cv::FILLED);
@@ -111,6 +121,7 @@ public:
         : Shape(base/2, height/2) {
         height_ = height;
         width_ = base;
+        color = Color(0, 255, 0);
     }
     
     Triangle(double base)
@@ -126,7 +137,7 @@ public:
     double getBase() const { return width_ ; }
     double getHeight() const { return height_; }
 
-    cv::Mat draw(Color color) const {
+    cv::Mat draw() const {
         cv::Mat image(height_, width_, CV_8UC3, cv::Scalar(0, 0, 0));
 
         cv::Point vertices[3];
@@ -155,6 +166,7 @@ public:
         : Shape(centerX, centerY) {
         height_ = width;
         width_ = width;
+        color = Color(0, 0, 255);
     }
 
     Rectangle(double width, double height)
@@ -173,7 +185,7 @@ public:
 
     double getSide() const { return width_; }
 
-    cv::Mat draw(Color color) const {
+    cv::Mat draw() const {
         cv::Mat image(height_, width_, CV_8UC3, cv::Scalar(0, 0, 0));
         cv::Point topLeft(0,0);
         cv::Point bottomRight(height_, width_ );
@@ -193,18 +205,31 @@ public:
 
 
 
-class Paper
+class Canvas
 {
 public:
-    Paper() = default;
-    Paper(Color color) : color_{ color }
+    Canvas() = default;
+    Canvas(Color color) : color_{ color }
     {}
-    Paper(int cols, int rows) : colums_{ cols }, rows_{ rows }
+    Canvas(int cols, int rows) : colums_{ cols }, rows_{ rows }
     {}
+
+    void drawShape(double posX, double posY, cv::Mat image) {
+        cv::Rect area(posX, posY, image.cols, image.rows);
+        data(area) += image;
+        cv::Mat test = data;
+    }
+
     void show() {
         cv::imshow("window", this->data);
         cv::waitKey(0);
+        cv::destroyAllWindows();
     }
+
+    void save(std::string imagePath) {
+        cv::imwrite(imagePath, this->data);
+    }
+
 private:
     Color color_;
     int colums_{ 1024 };  // in pixels
@@ -214,38 +239,168 @@ private:
 
 int Shape::nextID = 1; // Initialize the static variable
 
+//int main() {
+//    std::cout << "Udacity is eating my money!!!" << "\n";
+//  
+//    Color red(150, 0, 0);
+//
+//    Paper pap(red);
+//
+//    Triangle T(1000);
+//
+//    Rectangle S(500);
+//
+//    Circle C(100);
+//
+//    C.draw(red);
+//
+//    T.rotate(45);
+//    S.scale(2);
+//    S.rotate(30);
+//
+//
+//
+//    const cv::Mat bla = S.draw(red);
+//
+//    S.scale(0.3);
+//
+//    S.rotate(20);
+//
+//    S.draw(red);
+//
+//    pap.show();
+//
+//
+//
+//    return 0;
+//}
+
 int main() {
-    std::cout << "Udacity is eating my money!!!" << "\n";
-  
-    Color red(150, 0, 0);
+    std::vector<std::shared_ptr<Shape>> shapes;
+    int choice;
 
-    Paper pap(red);
+    while (true) {
+        std::cout << "Menu:\n";
+        std::cout << "1. Create Circle\n";
+        std::cout << "2. Create Triangle\n";
+        std::cout << "3. Create Rectangle\n";
+        std::cout << "4. Modify Shape\n";
+        std::cout << "5. Show Image\n";
+        std::cout << "6. Save Image\n";
+        std::cout << "7. Exit\n";
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
 
-    Triangle T(1000);
+        if (choice == 1) {
+            double radius;
+            std::cout << "Enter radius: ";
+            std::cin >> radius;
 
-    Rectangle S(500);
+            shapes.push_back(std::make_shared<Circle>(radius));
+        }
+        else if (choice == 2) {
+            double base, height;
+            std::cout << "Enter base length: ";
+            std::cin >> base;
+            std::cout << "Enter height: ";
+            std::cin >> height;
 
-    Circle C(100);
+            shapes.push_back(std::make_shared<Triangle>(base, height));
+        }
+        else if (choice == 3) {
+            double width, height;
+            std::cout << "Enter width: ";
+            std::cin >> width;
+            std::cout << "Enter height: ";
+            std::cin >> height;
 
-    C.draw(red);
+            shapes.push_back(std::make_shared<Rectangle>(width, height));
+        }
+        else if (choice == 4) {
+            int shapeId;
+            std::cout << "Enter shape ID: ";
+            std::cin >> shapeId;
 
-    T.rotate(45);
-    S.scale(2);
-    S.rotate(30);
+            if (shapeId >= 1 && shapeId <= shapes.size()) {
+                std::shared_ptr<Shape> shape = shapes[shapeId - 1];
 
+                int modifyChoice;
+                std::cout << "Modify Menu:\n";
+                std::cout << "1. Translate\n";
+                std::cout << "2. Rotate\n";
+                std::cout << "3. Scale\n";
+                std::cout << "4. Change Color\n";
+                std::cout << "Enter your choice: ";
+                std::cin >> modifyChoice;
 
+                if (modifyChoice == 1) {
+                    double dx, dy;
+                    std::cout << "Enter translation in X direction: ";
+                    std::cin >> dx;
+                    std::cout << "Enter translation in Y direction: ";
+                    std::cin >> dy;
 
-    const cv::Mat bla = S.draw(red);
+                    shape->translate(dx, dy);
+                }
+                else if (modifyChoice == 2) {
+                    double degrees;
+                    std::cout << "Enter rotation angle in degrees: ";
+                    std::cin >> degrees;
 
-    S.scale(0.3);
+                    shape->rotate(degrees);
+                }
+                else if (modifyChoice == 3) {
+                    double factor;
+                    std::cout << "Enter scaling factor: ";
+                    std::cin >> factor;
 
-    S.rotate(20);
+                    shape->scale(factor);
+                }
+                else if (modifyChoice == 4) {
+                    unsigned char r, g, b;
+                    std::cout << "Enter new color (R G B): ";
+                    std::cin >> r >> g >> b;
 
-    S.draw(red);
+                    shape->changeColor(Color(r, g, b));
+                }
+                else {
+                    std::cout << "Invalid choice\n";
+                }
+            }
+            else {
+                std::cout << "Invalid shape ID\n";
+            }
+        }
+        else if (choice == 5) {
+            Canvas canvas(Color(0,0,0));
+            for (const auto& shape : shapes) {
+                cv::Mat m = shape->draw();
+                Point_ pt = shape->getPostion();
+                canvas.drawShape(pt.x, pt.y, m);
+            }
+            canvas.show();
+        }
+        else if (choice == 6) {
+            std::string imagePath;
+            std::cout << "Enter image path: ";
+            std::cin >> imagePath;
 
-    pap.show();
-
-
+            Canvas canvas;
+            for (const auto& shape : shapes) {
+                cv::Mat m = shape->draw();
+                Point_ pt = shape->getPostion();
+                canvas.drawShape(pt.x, pt.y, m);
+            }
+            canvas.save(imagePath);
+            std::cout << "Image saved successfully\n";
+        }
+        else if (choice == 7) {
+            break;
+        }
+        else {
+            std::cout << "Invalid choice\n";
+        }
+    }
 
     return 0;
 }
