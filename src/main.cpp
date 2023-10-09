@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <memory>
@@ -379,6 +379,13 @@ int main() {
             shapes.push_back(std::make_shared<Rectangle>(width, height));
         }
         else if (choice == 4) {
+
+            // List available objects with their IDs
+            std::cout << "Available Shapes:\n";
+            for (int i = 0; i < shapes.size(); i++) {
+                std::cout << "ID: " << i + 1 << ", Type: " << typeid(*shapes[i]).name() << " Position: (" << shapes[i]->getPostion().x <<"," << shapes[i]->getPostion().y << ") " <<
+                    " Height: "<<shapes[i]->getHeight()<< " Width: " << shapes[i]->getWidth() << "\n";
+            }
             int shapeId;
             std::cout << "Enter shape ID: ";
             std::cin >> shapeId;
@@ -419,7 +426,7 @@ int main() {
                     shape->scale(factor);
                 }
                 else if (modifyChoice == 4) {
-                    unsigned char r, g, b;
+                    int r, g, b;
                     std::cout << "Enter new color (R G B): ";
                     std::cin >> r >> g >> b;
 
@@ -433,29 +440,36 @@ int main() {
                 std::cout << "Invalid shape ID\n";
             }
         }
-        else if (choice == 5) {
-            auto canvasHeight = std::max_element(shapes.begin(), shapes.end(), [](Shape* a, Shape* b) {return (a->getPostion().x + a->getHeight()) > (b->getPostion().x + b->getHeight()); });
-            Canvas canvas(Color(0,0,0));
-            for (const auto& shape : shapes) {
-                cv::Mat m = shape->draw();
-                Point_ pt = shape->getPostion();
-                canvas.drawShape(pt.x, pt.y, m);
-            }
-            canvas.show();
-        }
-        else if (choice == 6) {
-            std::string imagePath;
-            std::cout << "Enter image path: ";
-            std::cin >> imagePath;
+        else if ((choice == 5) || (choice == 6)) {
+            double canvasHeight{ 500 }, canvasWidth{500};
 
-            Canvas canvas;
+            for (const auto& shape : shapes) {
+                double positionYPlusHeight = shape->getPostion().y + 1.5*std::max(shape->getWidth(),shape->getHeight()); // 1.5*Height → gives some boarder and also room to rotate the shape
+                double positionXPlusWidth = shape->getPostion().x + 1.5* std::max(shape->getWidth(), shape->getHeight());
+                canvasHeight = std::max(canvasHeight, positionYPlusHeight);
+                canvasWidth = std::max(canvasWidth, positionXPlusWidth);
+            }
+
+            int r{ 0 }, g{ 0 }, b{0};
+            std::cout << "Enter Canvas color (R G B): ";
+            std::cin >> r >> g >> b;
+
+            Canvas canvas(canvasHeight, canvasWidth, Color(r, g, b));
             for (const auto& shape : shapes) {
                 cv::Mat m = shape->draw();
                 Point_ pt = shape->getPostion();
                 canvas.drawShape(pt.x, pt.y, m);
             }
-            canvas.save(imagePath);
-            std::cout << "Image saved successfully\n";
+            if (choice == 5) {
+                canvas.show();
+            }
+            else{
+                std::string imagePath;
+                std::cout << "Enter image path: ";
+                std::cin >> imagePath;
+                canvas.save(imagePath);
+                std::cout << "Image saved successfully\n";
+            }
         }
         else if (choice == 7) {
             break;
