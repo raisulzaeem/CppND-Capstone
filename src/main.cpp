@@ -153,9 +153,7 @@ public:
     }
 
     Circle(double radius)
-        : Shape(radius, radius) {
-        height_ = radius * 2; // duplicate, combine the two constructors
-        width_ = radius * 2;
+        : Circle(radius,radius, radius) {
     }
 
     double getArea() const override {
@@ -184,11 +182,8 @@ public:
         color = Color(0, 255, 0);
     }
     
-    Triangle(double base)
-        : Shape(base / 2, (sqrt(3)*base)/4) {
-    
-        height_ = (sqrt(3) * base) / 2;
-        width_ = base;
+    Triangle(double base) // Equilateral triangle
+        : Triangle(base, (sqrt(3)*base)/2) {
     }
     double getArea() const override {
         return 0.5 * getBase() * getHeight(); // (1/2) * base * height
@@ -212,7 +207,7 @@ public:
         M.at<double>(1, 2) += bbox.height / 2.0 - (height_) / 2.0;
 
         cv::Mat TImage;
-        cv::warpAffine(image, TImage, M, TImage.size());
+        cv::warpAffine(image, TImage, M, bbox.size());
         return TImage;
     }
 
@@ -230,9 +225,7 @@ public:
     }
 
     Rectangle(double width, double height)
-        : Shape(width/2, height/2) {
-        height_ = width;
-        width_ = width;
+        : Rectangle(width, height, width/2, height/2) {
     }
 
     Rectangle(double side) //Square
@@ -300,42 +293,6 @@ private:
 };
 
 int Shape::nextID = 1; // Initialize the static variable
-
-//int main() {
-//    std::cout << "Udacity is eating my money!!!" << "\n";
-//  
-//    Color red(150, 0, 0);
-//
-//    Paper pap(red);
-//
-//    Triangle T(1000);
-//
-//    Rectangle S(500);
-//
-//    Circle C(100);
-//
-//    C.draw(red);
-//
-//    T.rotate(45);
-//    S.scale(2);
-//    S.rotate(30);
-//
-//
-//
-//    const cv::Mat bla = S.draw(red);
-//
-//    S.scale(0.3);
-//
-//    S.rotate(20);
-//
-//    S.draw(red);
-//
-//    pap.show();
-//
-//
-//
-//    return 0;
-//}
 
 int main() {
     std::vector<std::shared_ptr<Shape>> shapes;
@@ -441,16 +398,33 @@ int main() {
             }
         }
         else if ((choice == 5) || (choice == 6)) {
-            double canvasHeight{ 500 }, canvasWidth{500};
+            double minCanvasHeight{ 500 }, minCanvasWidth{500};
 
             for (const auto& shape : shapes) {
-                double positionYPlusHeight = shape->getPostion().y + 1.5*std::max(shape->getWidth(),shape->getHeight()); // 1.5*Height → gives some boarder and also room to rotate the shape
-                double positionXPlusWidth = shape->getPostion().x + 1.5* std::max(shape->getWidth(), shape->getHeight());
-                canvasHeight = std::max(canvasHeight, positionYPlusHeight);
-                canvasWidth = std::max(canvasWidth, positionXPlusWidth);
+                double positionYPlusHeight = shape->getPostion().y + std::max(shape->getWidth(),sqrt(2)*shape->getHeight());
+                double positionXPlusWidth = shape->getPostion().x + std::max(shape->getWidth(), sqrt(2)*shape->getHeight());
+                minCanvasHeight = std::max(minCanvasHeight, positionYPlusHeight);
+                minCanvasWidth = std::max(minCanvasWidth, positionXPlusWidth);
             }
 
             int r{ 0 }, g{ 0 }, b{0};
+            int canvasWidth{0}, canvasHeight{0};
+
+            while(canvasHeight < minCanvasHeight){
+                std::cout << "Canvas Height should be larger than "<<minCanvasHeight<<std::endl;
+                std::cout << "Enter Canvas Height: ";
+                std::cin >> canvasHeight;
+            }  
+            while(canvasWidth < minCanvasWidth)
+            {
+                std::cout << "Canvas Width should be larger than "<<minCanvasWidth<<std::endl;
+                std::cout << "Enter Canvas Width: ";
+                std::cin >> canvasWidth;
+            }
+
+        
+
+
             std::cout << "Enter Canvas color (R G B): ";
             std::cin >> r >> g >> b;
 
@@ -478,6 +452,5 @@ int main() {
             std::cout << "Invalid choice\n";
         }
     }
-
     return 0;
 }
