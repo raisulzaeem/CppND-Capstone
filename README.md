@@ -149,14 +149,14 @@ __Object Oriented Programming__
 
 |DONE | CRITERIA | MEETS SPECIFICATIONS| WHERE |
 |-- | -- | --| -- |
-| :heavy_check_mark: | The project uses Object Oriented Programming techniques. | The project code is organized into classes with class attributes to hold the data, and class methods to perform tasks. | Shape Class in main.cpp |
-| :heavy_check_mark: | Classes use appropriate access specifiers for class members. | All class data members are explicitly specified as public, protected, or private.| Shape Class in main.cpp |
-| :heavy_check_mark: | Class constructors utilize member initialization lists. | All class members that are set to argument values are initialized through member initialization lists.| Point_ Class, Shape Class, Color Struct |
-| :heavy_check_mark: | Classes abstract implementation details from their interfaces. | All class member functions document their effects, either through function names, comments, or formal documentation. Member functions do not change program state in undocumented ways.| Shape Abtract Class |
-| :heavy_check_mark: | Classes encapsulate behavior. | Appropriate data and functions are grouped into classes. Member data that is subject to an invariant is hidden from the user. State is accessed via member functions.| In Shape class, the variables center, height_, width_, angle_ |
-| :heavy_check_mark: | Classes follow an appropriate inheritance hierarchy. | Inheritance hierarchies are logical. Composition is used instead of inheritance when appropriate. Abstract classes are composed of pure virtual functions. Override functions are specified.| Rectangle, Circle, Triangle classes are inherited classes from the abstract Shape Class |
+| :heavy_check_mark: | The project uses Object Oriented Programming techniques. | The project code is organized into classes with class attributes to hold the data, and class methods to perform tasks. | Shape Class in main.cpp https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L29|
+| :heavy_check_mark: | Classes use appropriate access specifiers for class members. | All class data members are explicitly specified as public, protected, or private.| Shape Class in main.cpp https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L30|
+| :heavy_check_mark: | Class constructors utilize member initialization lists. | All class members that are set to argument values are initialized through member initialization lists.| Point_ Class https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L23 , Shape Class https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L34, Color Struct |
+| :heavy_check_mark: | Classes abstract implementation details from their interfaces. | All class member functions document their effects, either through function names, comments, or formal documentation. Member functions do not change program state in undocumented ways.| Shape Abtract Class https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L29 |
+| :heavy_check_mark: | Classes encapsulate behavior. | Appropriate data and functions are grouped into classes. Member data that is subject to an invariant is hidden from the user. State is accessed via member functions.| In Shape class, the variables center, height_, width_, angle_ https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L136|
+| :heavy_check_mark: | Classes follow an appropriate inheritance hierarchy. | Inheritance hierarchies are logical. Composition is used instead of inheritance when appropriate. Abstract classes are composed of pure virtual functions. Override functions are specified.| Rectangle, Circle, Triangle classes are inherited classes from the abstract Shape Class https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L146 |
 | :heavy_check_mark: | Overloaded functions allow the same function to operate on different parameters. | Different Constructors for Rectangle, Triangle class.  |
-| :heavy_check_mark: | Derived class functions override virtual base class functions. |One member function in an inherited class overrides a virtual base class member function.| the draw function in Base Shape class and Inherited Rectangle, Circle and Triangle class. |
+| :heavy_check_mark: | Derived class functions override virtual base class functions. |One member function in an inherited class overrides a virtual base class member function.| the draw(https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L121) and getArea() function in Base Shape class and Inherited Rectangle, Circle and Triangle class. |
 || Templates generalize functions in the project. | One function is declared with a template that allows it to accept a generic parameter.||
 
 __Memory Management__
@@ -168,7 +168,7 @@ __Memory Management__
 || The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate. | The project follows the Resource Acquisition Is Initialization pattern where appropriate, by allocating objects at compile-time, initializing objects when they are declared, and utilizing scope to ensure their automatic destruction.| |
 | :heavy_check_mark: | The project follows the Rule of 5. | For all classes, if any one of the copy constructor, copy assignment operator, move constructor, move assignment operator, and destructor are defined, then all of these functions are defined.| Done in Shape Base class |
 | :heavy_check_mark: | The project uses move semantics to move data, instead of copying it, where possible. | For classes with move constructors, the project returns objects of that class by value, and relies on the move constructor, instead of copying the object. | Done in move constructor and move assignment operator  |
-| :heavy_check_mark: | The project uses smart pointers instead of raw pointers. | The project uses at least one smart pointer: unique_ptr, shared_ptr, or weak_ptr. The project does not use raw pointers.| The variable center in Shape class in main.cpp |
+| :heavy_check_mark: | The project uses smart pointers instead of raw pointers. | The project uses at least one smart pointer: unique_ptr, shared_ptr, or weak_ptr. The project does not use raw pointers.| The variable center https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L139 in Shape class in main.cpp |
 
 __Concurrency__
 
@@ -176,5 +176,5 @@ __Concurrency__
 |-- | -- | --| -- |
 | | The project uses multithreading. | The project uses multiple threads in the execution.| |
 |  | A promise and future is used in the project. | A promise and future is used to pass data from a worker thread to a parent thread in the project code.| |
-|| A mutex or lock is used in the project. | A mutex or lock (e.g. std::lock_guard or `std::unique_lock) is used to protect data that is shared across multiple threads in the project code.| used in Buffer extensively |
+|| A mutex or lock is used in the project. | A mutex or lock (e.g. std::lock_guard or `std::unique_lock) is used to protect data that is shared across multiple threads in the project code.||
 |  | A condition variable is used in the project. | A std::condition_variable is used in the project code to synchronize thread execution.| |
