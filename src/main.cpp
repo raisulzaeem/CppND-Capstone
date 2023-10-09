@@ -29,14 +29,71 @@ public:
 class Shape {
 public:
     static int nextID;
-    const int id;
 
     // Constructor
     Shape(double centerX = 0.0, double centerY = 0.0, double angle = 0.0)
         : center(std::make_shared<Point_>(centerX, centerY)),
-        angle_(angle), id(nextID++)
+        angle_(angle), id_(nextID++)
     {
     }
+
+    // Copy Constructor
+    Shape(const Shape & other)
+        : center(std::make_shared<Point_>(*other.center)),
+        position(other.position),
+        angle_(other.angle_),
+        height_(other.height_),
+        width_(other.width_),
+        color(other.color),
+        id_(nextID++)
+    {
+    }
+
+    // Copy Assignment Operator
+    Shape& operator=(const Shape & other) {
+        if (this != &other) {
+            center = std::make_shared<Point_>(*other.center);
+            position = other.position;
+            angle_ = other.angle_;
+            height_ = other.height_;
+            width_ = other.width_;
+            color = other.color;
+            id_ = nextID++;
+        }
+        return *this;
+    }
+
+    // Move Constructor
+    Shape(Shape && other) noexcept
+        : center(std::move(other.center)),
+        position(std::move(other.position)),
+        angle_(other.angle_),
+        height_(other.height_),
+        width_(other.width_),
+        color(std::move(other.color)),
+        id_(other.id_)
+    {
+        other.id_ = -1;
+    }
+
+    // Move Assignment Operator
+    Shape& operator=(Shape && other) noexcept {
+        if (this != &other) {
+            center = std::move(other.center);
+            position = std::move(other.position);
+            angle_ = other.angle_;
+            height_ = other.height_;
+            width_ = other.width_;
+            color = std::move(other.color);
+            id_ = other.id_;
+            other.id_ = -1; // Invalidate the moved object
+        }
+        return *this;
+    }
+
+    // Destructor
+    virtual ~Shape() = default;
+
 
     // Methods to translate and rotate the shape
     virtual void translate(double dx, double dy) {
@@ -71,6 +128,8 @@ public:
     double getHeight() { return height_; }
     double getWidth() { return width_; }
 
+    int id() { return id_; }
+
     std::shared_ptr<Point_> getCenter() const { return center; }
 
 protected:
@@ -79,6 +138,7 @@ protected:
 private:
     std::shared_ptr<Point_> center;
     Point_ position{0, 0}; // Upper left corner
+    int id_;
 };
 
 
@@ -212,6 +272,8 @@ public:
     Canvas(Color color) : color_{ color }
     {}
     Canvas(int cols, int rows) : colums_{ cols }, rows_{ rows }
+    {}
+    Canvas(int cols, int rows, Color color) : colums_{ cols }, rows_{ rows }, color_{color}
     {}
 
     void drawShape(double posX, double posY, cv::Mat image) {
@@ -372,6 +434,7 @@ int main() {
             }
         }
         else if (choice == 5) {
+            auto canvasHeight = std::max_element(shapes.begin(), shapes.end(), [](Shape* a, Shape* b) {return (a->getPostion().x + a->getHeight()) > (b->getPostion().x + b->getHeight()); });
             Canvas canvas(Color(0,0,0));
             for (const auto& shape : shapes) {
                 cv::Mat m = shape->draw();
