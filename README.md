@@ -2,7 +2,9 @@
 
 ## Shape drawing console application in C++ with OpenCV
 
+<p align="center">
 <img src="drawing.png"/>
+</p>
 
 ## Overview
 This is the capstone project for the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). This Shape Drawing Program is a C++ console application that allows users to create, manipulate, and draw various shapes, including circles, triangles, and rectangles, on a canvas. **Here, the canvas should be black or other dark colors, as we use additive color models to display the colors**. we add Users can modify shapes by translating, rotating, scaling, and changing colors. The program provides an intuitive menu interface for these actions and allows users to display and save the drawn images. It uses opencv library to create different shape, draw and transform them.
@@ -16,6 +18,69 @@ This repository contains:
 - `CMakeLists.txt` : cmake configuration file
 
 - `README.md` : This file
+
+## Class Structure 
+
+This code defines a hierarchy of C++ classes for creating and manipulating geometric shapes on a canvas. Let's break down the class structure and their relationships:
+
+### Class Diagram
+<p align="center">
+<img src="ClassDiagram.png">
+</p>
+### Color:
+
+Represents a color with red (R), green (G), and blue (B) components.
+It has a default constructor and a parameterized constructor.
+
+### Point_:
+
+Represents a 2D point with x and y coordinates.
+
+### Shape (Abstract Base Class):
+
+Represents a generic geometric shape.
+Contains member data and functions common to all shapes.
+Has a shared pointer to a Point_ representing the center of the shape.
+Includes functions for translating, rotating, scaling, and changing the color of a shape.
+Provides virtual functions getArea() and draw() that must be implemented by derived classes.
+Contains getters for various shape properties and an id() function for identifying shapes.
+Has both copy and move constructors and assignment operators.
+
+### Circle (Derived from Shape):
+
+Represents a circle.
+Includes specific methods for calculating its area and drawing it.
+Inherits properties and methods from the Shape class.
+
+
+### Triangle (Derived from Shape):
+
+Represents a triangle.
+Includes specific methods for calculating its area and drawing it.
+Inherits properties and methods from the Shape class.
+
+
+### Rectangle (Derived from Shape):
+
+Represents a rectangle (or square).
+Includes specific methods for calculating its area and drawing it.
+Inherits properties and methods from the Shape class.
+
+
+### Canvas:
+
+Represents a canvas on which shapes can be drawn.
+Contains methods for drawing shapes, displaying the canvas, and saving it as an image.
+Has member data for the canvas size and color.
+
+
+### **Relationships**:
+
+Circle, Triangle, and Rectangle are derived classes from the Shape base class. They inherit common shape properties and behaviors but provide their own implementations of getArea() and draw() specific to their shapes.
+
+Shape contains a shared pointer to a Point_ object representing the center of the shape. This demonstrates composition and encapsulation.
+
+Canvas can be used to draw and display shapes. It uses OpenCV (cv::Mat) to manage the canvas and draw shapes on it.
 
 
 ## Dependencies for Running Locally
