@@ -7,13 +7,13 @@
 </p>
 
 ## Overview
-This is the capstone project for the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). This Shape Drawing Program is a C++ console application that allows users to create, manipulate, and draw various shapes, including circles, triangles, and rectangles, on a canvas. **Here, the canvas should be black or other dark colors, as we use additive color models to display the colors**. we add Users can modify shapes by translating, rotating, scaling, and changing colors. The program provides an intuitive menu interface for these actions and allows users to display and save the drawn images. It uses opencv library to create different shape, draw and transform them.
+This is the capstone project for the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). This Shape Drawing Program is a C++ console application that allows users to create, manipulate, and draw various shapes, including circles, triangles, and rectangles, on a canvas. **Here, the canvas should be black or other dark colors, as we use additive color models to display the colors**. we add Users can modify shapes by translating, rotating, scaling, and changing colors. The program provides an intuitive menu interface for these actions and allows users to display and save the drawn images. It uses opencv library to create different shapes, draw, and transform them.
 
 ## File Structure
 
 This repository contains:
 
-- `src/` : Source. Constains the `main.cpp` file.
+- `src/` : Source. Contains the `main.cpp` file.
 
 - `CMakeLists.txt` : cmake configuration file
 
@@ -101,7 +101,7 @@ Canvas can be used to draw and display shapes. It uses OpenCV (cv::Mat) to manag
 
 ## Build Instructions
 
-1. Clone this repo using `git clone https://github.com/avnishsachar/CppND-Program-Capstone-Project.git`
+1. Clone this repo using `git clone https://github.com/raisulzaeem/CppND-Capstone.git`
 2. Enter the root directory of the repository using `cd CppND-Capstone`
 3. `mkdir build && cd build`
 4. `cmake ..`
@@ -180,7 +180,7 @@ Specify the canvas size and color when prompted.
 The canvas with all shapes will be displayed in a window.
 #### Save Image
 Select "Save Image" from the menu.
-Specify the canvas size, color, and the image path when prompted. The canvas with all shapes will be saved as an image in the specified location. The image path should also contain the the extension of the image type. An example image path would be `/home/workspace/my_drawing.png`.
+Specify the canvas size, color, and image path when prompted. The canvas with all shapes will be saved as an image in the specified location. The image path should also contain the extension of the image type. An example image path would be `/home/workspace/my_drawing.png`.
 
 ### Exiting the Program
 To exit the program, choose "Exit" from the menu.
@@ -200,7 +200,7 @@ __Compiling and Testing (All Rubric Points REQUIRED)__
 
 |DONE | CRITERIA | MEETS SPECIFICATIONS| WHERE |
 |-- | -- | --| -- |
-| :heavy_check_mark: | The submission must compile and run. | The project code must compile and run without errors. We strongly recommend using cmake and make, as provided in the starter repos. If you choose another build system, the code must compile on any reviewer platform. |
+| :heavy_check_mark: | The submission must compile and run. | The project code must compile and run without errors. We strongly recommend using cmake and make, as provided in the starter repos. If you choose another build system, the code must be compiled on any reviewer platform. |
 
 __Loops, Functions, I/O__
 
@@ -208,7 +208,7 @@ __Loops, Functions, I/O__
 |-- | -- | --| -- |
 | :heavy_check_mark: | The project demonstrates an understanding of C++ functions and control structures.| A variety of control structures are used in the project. The project code is clearly organized into functions.| main.cpp file |
 | :heavy_check_mark: | The project reads data from a file and process the data, or the program writes data to a file. | The project reads data from an external file or writes data to a file as part of the necessary operation of the program.| The program saves the drawing as an image https://github.com/raisulzaeem/CppND-Capstone/blob/fb69891e9904ea0d42720036b7356ad78e6e0829/src/main.cpp#L444  |
-| :heavy_check_mark: | The project accepts user input and processes the input.|The project accepts input from a user as part of the necessary operation of the program.|  The programm is a console application and continuously accepts and processes user inputs |
+| :heavy_check_mark: | The project accepts user input and processes the input.|The project accepts input from a user as part of the necessary operation of the program.|  The program is a console application and continuously accepts and processes user inputs |
 
 __Object Oriented Programming__
 
@@ -217,9 +217,9 @@ __Object Oriented Programming__
 | :heavy_check_mark: | The project uses Object Oriented Programming techniques. | The project code is organized into classes with class attributes to hold the data, and class methods to perform tasks. | Shape Class in main.cpp https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L29|
 | :heavy_check_mark: | Classes use appropriate access specifiers for class members. | All class data members are explicitly specified as public, protected, or private.| Shape Class in main.cpp https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L30|
 | :heavy_check_mark: | Class constructors utilize member initialization lists. | All class members that are set to argument values are initialized through member initialization lists.| Point_ Class https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L23 , Shape Class https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L34, Color Struct |
-| :heavy_check_mark: | Classes abstract implementation details from their interfaces. | All class member functions document their effects, either through function names, comments, or formal documentation. Member functions do not change program state in undocumented ways.| Shape Abtract Class https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L29 |
-| :heavy_check_mark: | Classes encapsulate behavior. | Appropriate data and functions are grouped into classes. Member data that is subject to an invariant is hidden from the user. State is accessed via member functions.| In Shape class, the variables center, height_, width_, angle_ https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L136|
-| :heavy_check_mark: | Classes follow an appropriate inheritance hierarchy. | Inheritance hierarchies are logical. Composition is used instead of inheritance when appropriate. Abstract classes are composed of pure virtual functions. Override functions are specified.| Rectangle, Circle, Triangle classes are inherited classes from the abstract Shape Class https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L146 |
+| :heavy_check_mark: | Classes abstract implementation details from their interfaces. | All class member functions document their effects, either through function names, comments, or formal documentation. Member functions do not change the program state in undocumented ways.| Shape Abstract Class https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L29 |
+| :heavy_check_mark: | Classes encapsulate behavior. | Appropriate data and functions are grouped into classes. Member data that is subject to an invariant is hidden from the user. The state is accessed via member functions.| In Shape class, the variables center, height_, width_, angle_ https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L136|
+| :heavy_check_mark: | Classes follow an appropriate inheritance hierarchy. | Inheritance hierarchies are logical. Composition is used instead of inheritance when appropriate. Abstract classes are composed of pure virtual functions. Override functions are specified.| Rectangle, Circle, and Triangle classes are inherited classes from the abstract Shape Class https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L146 |
 | :heavy_check_mark: | Overloaded functions allow the same function to operate on different parameters. | Different Constructors for Rectangle, Triangle class.  |
 | :heavy_check_mark: | Derived class functions override virtual base class functions. |One member function in an inherited class overrides a virtual base class member function.| the draw(https://github.com/raisulzaeem/CppND-Capstone/blob/09c79699380d79932b94ed5904e4b1b9683a3301/src/main.cpp#L121) and getArea() function in Base Shape class and Inherited Rectangle, Circle and Triangle class. |
 || Templates generalize functions in the project. | One function is declared with a template that allows it to accept a generic parameter.||
@@ -228,7 +228,7 @@ __Memory Management__
 
 |DONE | CRITERIA | MEETS SPECIFICATIONS| WHERE |
 |-- | -- | --| -- |
-| :heavy_check_mark: | The project makes use of references in function declarations. | At least two variables are defined as references, or two functions use pass-by-reference in the project code.|Copy Constructor and Copy Assignment Operator|
+| :heavy_check_mark: | The project makes use of references in function declarations. | At least two variables are defined as references or two functions use pass-by-reference in the project code.|Copy Constructor and Copy Assignment Operator|
 || The project uses destructors appropriately. | At least one class that uses unmanaged dynamically allocated memory, along with any class that otherwise needs to modify state upon the termination of an object, uses a destructor. | |
 || The project uses scope / Resource Acquisition Is Initialization (RAII) where appropriate. | The project follows the Resource Acquisition Is Initialization pattern where appropriate, by allocating objects at compile-time, initializing objects when they are declared, and utilizing scope to ensure their automatic destruction.| |
 | :heavy_check_mark: | The project follows the Rule of 5. | For all classes, if any one of the copy constructor, copy assignment operator, move constructor, move assignment operator, and destructor are defined, then all of these functions are defined.| Done in Shape Base class |
